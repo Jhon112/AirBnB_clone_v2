@@ -52,10 +52,12 @@ class FileStorage:
             obj: given object
         """
         if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            if key in self.__objects:
+            try:
+                key = "{}.{}".format(type(obj).__name__, obj.id)
                 del self.__objects[key]
                 self.save()
+            except:
+                pass
 
     def save(self):
         """serialize the file path to JSON file path
