@@ -10,7 +10,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
@@ -43,6 +42,24 @@ class HBNBCommand(cmd.Cmd):
                 raise SyntaxError()
             my_list = line.split(" ")
             obj = eval("{}()".format(my_list[0]))
+
+            for parameters in my_list:
+
+                try:
+                    param_list = parameters.split("=")
+                    key_name = param_list[0]
+
+                    if "\"" == param_list[1][0]:
+                        value = param_list[1].replace("_", " ")[1:-1]
+                    elif "." in param_list[1]:
+                        value = float(param_list[1])
+                    else:
+                        value = int(param_list[1])
+
+                    setattr(obj, key_name, value)
+                except:
+                    continue
+
             obj.save()
             print("{}".format(obj.id))
         except SyntaxError:
@@ -118,9 +135,9 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
-        objects = storage.all()
         my_list = []
         if not line:
+            objects = storage.all()
             for key in objects:
                 my_list.append(objects[key])
             print(my_list)
@@ -129,7 +146,8 @@ class HBNBCommand(cmd.Cmd):
             args = line.split(" ")
             if args[0] not in self.all_classes:
                 raise NameError()
-            for key in objects:
+            objects = storage.all(args[0])
+            for key in objects.keys():
                 name = key.split('.')
                 if name[0] == args[0]:
                     my_list.append(objects[key])
