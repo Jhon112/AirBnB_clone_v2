@@ -35,8 +35,9 @@ class DBStorage:
         """
         if cls is None:
             obj_types = [User, State, Place, City, Amenity, Review]
-            res_list = [list(self.__session.query(type).all()) for
+            res_list = [self.__session.query(type).all() for
                         type in obj_types]
+            res_list = [obj for query_list in res_list for obj in query_list]
                         
             # res_list.append(list(self.__session.query(User).all()))
             # res_list.append(list(self.__session.query(State).all()))
@@ -67,7 +68,6 @@ class DBStorage:
             except:
                 pass
             my_dict[key] = obj
-
         return my_dict
 
     def new(self, obj):
