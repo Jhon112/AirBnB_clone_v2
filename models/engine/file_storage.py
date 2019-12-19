@@ -26,13 +26,13 @@ class FileStorage:
             returns a dictionary of __object
         """
         if cls:
-            # new_dict = {}
-            # for key, value in self.__objects.items():
-            #     if type(value).__name__ == cls:
-            #         new_dict[key] = value
-            new_dict = dict(filter(lambda val: type(
-                val).__name__ == cls, self.__objects.values()))
-            print(new_dict)
+            new_dict = {}
+            for key, value in self.__objects.items():
+                if type(value).__name__ == cls:
+                    new_dict[key] = value
+            # new_dict = dict(filter(lambda val: type(
+            #     val).__name__ == cls, self.__objects.values()))
+            # print(new_dict)
             return new_dict
         return self.__objects
 
