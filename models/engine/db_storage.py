@@ -9,15 +9,13 @@ import os
 
 
 class DBStorage:
-    """
-    New engine that will create tables for models
+    """New database engine
     """
     __engine = None
     __session = None
 
     def __init__(self):
-        """
-        Constructor. Inits an engine
+        """Constructor class for the new engine
         """
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
@@ -26,19 +24,19 @@ class DBStorage:
                                               os.getenv("HBNB_MYSQL_HOST"),
                                               os.getenv("HBNB_MYSQL_DB")),
                                       pool_pre_ping=True)
+
         if os.getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """
-        search on database
+        """Query on the curent database
         """
         if cls is None:
             # obj_types = [User, State, Place, City, Amenity, Review]
             # res_list = [self.__session.query(type).all() for
             #             type in obj_types]
             # res_list = [obj for query_list in res_list for obj in query_list]
-                        
+
             res_list = []
             res_list += self.__session.query(User).all()
             res_list += self.__session.query(State).all()
@@ -59,16 +57,13 @@ class DBStorage:
                 res_list = list(self.__session.query(Amenity).all())
             if cls == "Review":
                 res_list = list(self.__session.query(Review).all())
+
         my_dict = {}
         for obj in res_list:
             class_name = type(obj).__name__
             key = class_name + "." + str(obj.id)
-            try:
-                if obj._sa_instance_state:
-                    del obj._sa_instance_state
-            except:
-                pass
             my_dict[key] = obj
+
         return my_dict
 
     def new(self, obj):

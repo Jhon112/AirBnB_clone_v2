@@ -25,9 +25,15 @@ class FileStorage:
         Return:
             returns a dictionary of __object
         """
+        new_dict = {}
         if cls:
-            new_dict = dict(filter(lambda object: type(object[1]) == cls, self.__objects.items()))
+            # new_dict = dict(filter(lambda object: type(object[1]) == cls, self.__objects.items()))
+
+            for key, value in self.__objects.items():
+                if type(value).__name__ == cls:
+                    new_dict[key] = value
             return new_dict
+
         return self.__objects
 
     def new(self, obj):
@@ -40,10 +46,7 @@ class FileStorage:
             self.__objects[key] = obj
 
     def delete(self, obj=None):
-        """
-        Deletes an object
-        Args:
-            obj: given object
+        """To delete obj from __objects if its inside
         """
         if obj:
             try:
