@@ -5,8 +5,11 @@ import models
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from shlex import split
+import hashlib
 
 Base = declarative_base()
+
 
 class BaseModel:
     """This class will defines all common attributes/methods
@@ -33,6 +36,12 @@ class BaseModel:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 if key != "__class__":
                     setattr(self, key, value)
+                if "id" not in kwargs.keys():
+                    self.id = str(uuid.uuid4())
+                if "created_at" not in kwargs.keys():
+                    self.created_at = self.updated_at = datetime.now()
+                elif "updated_at" not in kwargs.keys():
+                    self.updated_at = self.created_at
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
@@ -42,6 +51,12 @@ class BaseModel:
         Return:
             returns a string of class name, id, and dictionary
         """
+        copy_dict = self.__dict__.copy()
+        if "_sa_instance_state" in copy_dict.keys():
+            del copy_dict["_sa_instance_state"]
+            return "[{}] ({}) {}".format(
+                type(self).__name__, self.id, copy_dict)
+
         return "[{}] ({}) {}".format(
             type(self).__name__, self.id, self.__dict__)
 
@@ -57,7 +72,6 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-
     def to_dict(self):
         """creates dictionary of the class  and returns
         Return:
@@ -72,7 +86,7 @@ class BaseModel:
         return my_dict
 
     def delete(self):
-        """
-        delete the current instance from the storage
+        """delete the current instance from the storage (models.storage)
+        by calling the method delete
         """
         models.storage.delete(self)
