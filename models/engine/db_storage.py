@@ -37,11 +37,6 @@ class DBStorage:
         """Query on the curent database
         """
         if cls is None:
-            # obj_types = [User, State, Place, City, Amenity, Review]
-            # res_list = [self.__session.query(type).all() for
-            #             type in obj_types]
-            # res_list = [obj for query_list in res_list for obj in query_list]
-
             res_list = []
             res_list += self.__session.query(User).all()
             res_list += self.__session.query(State).all()
