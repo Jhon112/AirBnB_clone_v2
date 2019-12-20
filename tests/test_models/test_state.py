@@ -109,6 +109,5 @@ class TestState(unittest.TestCase):
         db_conn2.close()
         self.assertTrue(new_obj - n_obj == 1)
 
-
 if __name__ == "__main__":
     unittest.main()

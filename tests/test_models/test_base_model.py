@@ -86,6 +86,5 @@ class TestBaseModel(unittest.TestCase):
         obj.delete()
         self.assertTrue(obj not in storage._FileStorage__objects.values())
 
-
 if __name__ == "__main__":
     unittest.main()

@@ -118,6 +118,5 @@ class TestFileStorage(unittest.TestCase):
         obj = storage.all()
         self.assertTrue(key not in obj.keys())
 
-
 if __name__ == "__main__":
     unittest.main()
