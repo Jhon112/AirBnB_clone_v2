@@ -27,8 +27,6 @@ class FileStorage:
         """
         new_dict = {}
         if cls:
-            # new_dict = dict(filter(lambda object: type(object[1]) == cls, self.__objects.items()))
-
             for key, value in self.__objects.items():
                 if type(value).__name__ == cls:
                     new_dict[key] = value
