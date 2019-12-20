@@ -22,8 +22,6 @@ class State(BaseModel, Base):
         equals to the current State.id
         """
         cities_dict = models.storage.all(City)
-        # my_dict = {key: val for key, val in cities_dict.items() if
-        #            val.id == self.id}
         my_dict = {}
         for key, value in cities_dict.items():
             if value.id == self.id:
