@@ -16,8 +16,8 @@ class HBNBCommand(cmd.Cmd):
     """this class is entry point of the command interpreter
     """
     prompt = "(hbnb) "
-    all_classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
+    all_classes = {"BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"}
 
     def emptyline(self):
         """Ignores empty spaces"""
@@ -140,6 +140,7 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all()
             for key in objects:
                 my_list.append(objects[key])
+            print(my_list)
             return
         try:
             args = line.split(" ")
@@ -164,21 +165,17 @@ class HBNBCommand(cmd.Cmd):
             AttributeError: when there is no attribute given
             ValueError: when there is no value given
         """
-        my_list = []
         try:
             if not line:
                 raise SyntaxError()
-            if " " in line:
-                my_list = line.split(" ")
-            else:
-                my_list.append(line)
+            my_list = split(line, " ")
             if my_list[0] not in self.all_classes:
                 raise NameError()
             if len(my_list) < 2:
                 raise IndexError()
             objects = storage.all()
             key = my_list[0] + '.' + my_list[1]
-            if key not in objects.keys():
+            if key not in objects:
                 raise KeyError()
             if len(my_list) < 3:
                 raise AttributeError()
@@ -207,16 +204,12 @@ class HBNBCommand(cmd.Cmd):
         """count the number of instances of a class
         """
         counter = 0
-        my_list = []
         try:
-            if " " in line:
-                my_list = split(line, " ")
-            else:
-                my_list.append(line)
+            my_list = split(line, " ")
             if my_list[0] not in self.all_classes:
                 raise NameError()
             objects = storage.all()
-            for key in objects.keys():
+            for key in objects:
                 name = key.split('.')
                 if name[0] == my_list[0]:
                     counter += 1
